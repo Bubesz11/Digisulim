@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Blackjack</title>
+        <link rel="stylesheet" href="blackjack.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="icon" href="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ad0fa87e-0fa4-4b6e-b1c3-e31271c25be2/d6ibf1c-07d45329-f934-420e-9242-e5c5c6e285d7.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2FkMGZhODdlLTBmYTQtNGI2ZS1iMWMzLWUzMTI3MWMyNWJlMlwvZDZpYmYxYy0wN2Q0NTMyOS1mOTM0LTQyMGUtOTI0Mi1lNWM1YzZlMjg1ZDcucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.pEd9a8eOIgalOd2J4UiHE-u7V2GesxdgLedlx9OjrRE">
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                text-align: center;
+                background-image: url('https://static.vecteezy.com/system/resources/previews/002/582/107/original/poker-black-background-playing-card-symbols-pattern-blackjack-vector.jpg');
+                background-size: 100%; 
+                background-position: center; 
+                color: red;
+            }
+            
+
+            #dealer-cards img {
+                height: 200px;
+                width: 150px;
+                margin: 20px;
+                transform: rotate(-20deg);
+            }
+
+            #your-cards img {
+                height: 200px;
+                width: 150px;
+                margin: 20px;
+                transform: rotate(-20deg);
+            }
+
+            #hit {
+                width: 100px;
+                height: 50px;
+                font-size: 20px;
+            }
+
+            #stay {
+                width: 100px;
+                height: 50px;
+                font-size: 20px;
+            }
+            #reset{
+                width: 100px;
+                height: 50px;
+                font-size: 20px;
+            }
+            #troll{
+                width: 200px;
+                height: 100px;
+                text-decoration: none;
+                font-size: 15px;
+                color: black;
+            }
+
+            button{
+                margin: 10px;
+                border-radius: 20px;
+                background-color: rgb(51, 51, 51);
+                color: red;
+            }
+            button:hover{
+                transition: 500ms;
+                box-shadow: 2px 2px 20px red;
+            }
+            .row{
+                padding-bottom: 200px;
+            }
+            .col-sm{
+                width: 100%;
+            }
+            @media only screen and (max-width: 1195px) {
+    body {
+      background-image: url('https://static.vecteezy.com/system/resources/previews/002/582/107/original/poker-black-background-playing-card-symbols-pattern-blackjack-vector.jpg');
+      background-repeat:calc();
+    }
+  }
+  
+  @media only screen and (max-width: 591px) {
+      #dealer-cards img {
+          height: 100px;
+                  width: 80px;
+                  margin: 20px;
+                  transform: rotate(-20deg);
+    }
+  }
+  
+  @media only screen and (max-width: 591px) {
+      #your-cards img {
+          height: 100px;
+                  width: 80px;
+                  margin: 20px;
+                  transform: rotate(-20deg);
+    }
+  }
+  @media only screen and (max-width: 591px) {
+      .row{
+        padding-bottom: 0px;
+      }
+    }
+  
+        </style>
+        <script>
+
+            
+
+            function checkPassword() {
+            var jelszo = prompt("Kérlek, add meg a jelszót:");
+        if (jelszo === "pneumatika") {
+            alert("Helyes");
+            document.getElementById("jelszo").style.display = "none";
+        } else {
+            alert("Hibás jelszó");
+        }
+}
+            let dealerSum = 0;
+            let yourSum = 0;
+
+            let dealerAceCount = 0;
+            let yourAceCount = 0; 
+
+            let hidden;
+            let deck;
+
+            let canHit = true; 
+
+            window.onload = function() {
+                buildDeck();
+                shuffleDeck();
+                startGame();
+            }
+
+            function buildDeck() {
+                let values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+                let types = ["C", "D", "H", "S"];
+                deck = [];
+
+                for (let i = 0; i < types.length; i++) {
+                    for (let j = 0; j < values.length; j++) {
+                        deck.push(values[j] + "-" + types[i]);
+                    }
+                }
+            }
+
+            function shuffleDeck() {
+                for (let i = 0; i < deck.length; i++) {
+                    let j = Math.floor(Math.random() * deck.length); 
+                    let temp = deck[i];
+                    deck[i] = deck[j];
+                    deck[j] = temp;
+                }
+            }
+
+            function startGame() {
+                hidden = deck.pop();
+                dealerSum += getValue(hidden);
+                dealerAceCount += checkAce(hidden);
+
+                while (dealerSum < 15) {
+                    let cardImg = document.createElement("img");
+                    let card = deck.pop();
+                    cardImg.src = "" + card + ".png";
+                    dealerSum += getValue(card);
+                    dealerAceCount += checkAce(card);
+                    document.getElementById("dealer-cards").append(cardImg);
+                }
+
+                for (let i = 0; i < 1; i++) {
+                    let cardImg = document.createElement("img");
+                    let card = deck.pop();
+                    cardImg.src = "" + card + ".png";
+                    yourSum += getValue(card);
+                    yourAceCount += checkAce(card);
+                    document.getElementById("your-cards").append(cardImg);
+                }
+
+                document.getElementById("hit").addEventListener("click", hit);
+                document.getElementById("stay").addEventListener("click", stay);
+                document.getElementById("your-sum").innerText = yourSum;
+            }
+
+            function hit() {
+                if (!canHit) {
+                    return;
+                }
+
+                let cardImg = document.createElement("img");
+                let card = deck.pop();
+                cardImg.src = "" + card + ".png";
+                yourSum += getValue(card);
+                yourAceCount += checkAce(card);
+                document.getElementById("your-cards").append(cardImg);
+
+                if (reduceAce(yourSum, yourAceCount) > 21) { 
+                    canHit = false;
+                }
+                document.getElementById("your-sum").innerText = yourSum;
+            }
+
+            function stay() {
+                dealerSum = reduceAce(dealerSum, dealerAceCount);
+                yourSum = reduceAce(yourSum, yourAceCount);
+
+                canHit = false;
+                document.getElementById("hidden").src = "" + hidden + ".png";
+
+                let message = "";
+                if (yourSum > 21) {
+                    message = "Vesztettél!";
+                } else if (dealerSum > 21) {
+                    message = "Nyertél!";
+                } else if (yourSum == dealerSum) {
+                    message = "Döntetlen!";
+                } else if (yourSum > dealerSum) {
+                    message = "Nyertél!";
+                } else if (yourSum < dealerSum) {
+                    message = "Vesztettél!";
+                }
+
+                document.getElementById("dealer-sum").innerText = dealerSum;
+                document.getElementById("your-sum").innerText = yourSum;
+                document.getElementById("results").innerText = message;
+            }
+
+            function getValue(card) {
+                let data = card.split("-");
+                let value = data[0];
+
+                if (isNaN(value)) { 
+                    if (value == "A") {
+                        return 11;
+                    }
+                    return 10;
+                }
+                return parseInt(value);
+            }
+
+            function checkAce(card) {
+                if (card[0] == "A") {
+                    return 1;
+                }
+                return 0;
+            }
+
+            function reduceAce(playerSum, playerAceCount) {
+                while (playerSum > 21 && playerAceCount > 0) {
+                    playerSum -= 10;
+                    playerAceCount -= 1;
+                }
+                return playerSum;
+            }
+
+            function resetPage() {
+                window.location.reload();
+            }
+
+            document.getElementById("dealer-sum-display").innerText = dealerSum;
+            document.getElementById("your-sum-display").innerText = yourSum;
+            function play(soundFile) {
+    var audio = new Audio(soundFile);
+    audio.play();
+}
+
+        </script>
+    </head>
+
+    <body>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div class="container">
+            <div class="row">
+              <div class="col-sm">
+                <h1>Osztó: <span id="dealer-sum"></span></h1>
+                <div id="dealer-cards">
+                    <img id="hidden" src="BACK.png">
+                </div>
+              </div>
+              <div class="col-sm">
+                <h1>Te: <span id="your-sum"></span></h1>
+                <div id="your-cards"></div>
+              </div>
+            </div>
+          </div>
+        <button id="hit" onclick="play('huzas.mp3')">Húzás</button>
+        <button id="stay" onclick="play('flip.mp3')">Megállás</button>
+        <button  id="reset" onclick="resetPage()">Reset</button>
+        <h1 id="results"></h1>
+    </body>
+</html>

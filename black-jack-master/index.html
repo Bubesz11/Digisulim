@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        body{
+            color: red;
+            text-align: center;
+            background-image: url('https://static.vecteezy.com/system/resources/previews/002/582/107/original/poker-black-background-playing-card-symbols-pattern-blackjack-vector.jpg');
+        }
+.kozep{
+    position: fixed;
+    transform: translate(-50%,-50%);
+    left: 50%;
+    top: 50%;
+    border: solid 1px black;
+    border-radius: 5px;
+    height: 100%;
+    width: 100%;
+    backdrop-filter: blur(10px);
+}
+
+a{
+    text-align: center;
+}
+
+    </style>
+    <script>
+        function jelszoEllenorzes() {
+    var jelszo = document.getElementById("jelszoDoboz");
+    var beirtJelszo = jelszo.value;
+    if (beirtJelszo == "PNEUMATIKA") {
+        document.querySelector('.kozep').style.display = 'none';
+       
+        return true;
+    }
+
+
+    alert("Hozzáférés megtagadva! Helytelen jelszó!");
+    return false;
+}
+
+    </script>
+</head>
+<body>
+    <div class="kozep">
+        <h1 style="font: 60px;text-align: center;">A weblap eléréséhez add meg a jelszót!</h1>
+        <br>
+        <br>
+        <h1 style="text-align: center;">Jelszó:  <input id="jelszoDoboz" type="password"/></h1>
+        <a onclick="return jelszoEllenorzes();" style="color: black;">
+            <button onclick="return jelszoEllenorzes();" style="color: black;position: absolute;left: 50%;">Ellenőrzés</button>
+        </a>
+    </div>
+    <a href="blackjack.html" style="font-size: 50px;color: red;margin-top: 50%">A játékhoz kattints ide</a>
+</body>
+</html>
